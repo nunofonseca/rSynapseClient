@@ -22,7 +22,9 @@ uploadFileToEntity<-function(filePath, uploadDestination, curlHandle=getCurlHand
       destinationPath<-parsedUrl@path
       # path from url starts with "/" but this isn't meant to mean to go to the root of the remote file system
       if (substring(destinationPath,1,1)=="/") destinationPath<-substring(destinationPath, 2)
-      createMissingDirectories(parsedUrl@host, credentials$username, credentials$password, destinationPath)
+      # do not create any missing directories
+      # since the user my not have permission to write to the toplevel folders
+      # createMissingDirectories(parsedUrl@host, credentials$username, credentials$password, destinationPath)
       remotePathAndFile<-file.path(destinationPath, fileName)
       cat(sprintf("Uploading %s to %s ...\n", filePath, remotePathAndFile))
       success<-sftpUpload(parsedUrl@host, credentials$username, credentials$password, remotePathAndFile, filePath)
